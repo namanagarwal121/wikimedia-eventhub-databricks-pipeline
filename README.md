@@ -1,25 +1,124 @@
-<<<<<<< HEAD
-# wikimedia_ingestion
+# 📊 Wikimedia Streaming Data Pipeline (Bronze → Silver → Gold with SCD Type 2)
 
-This folder defines all source code for the 'wikimedia_ingestion' pipeline:
+## 🚀 Overview
 
-- `explorations`: Ad-hoc notebooks used to explore the data processed by this pipeline.
-- `transformations`: All dataset definitions and transformations.
-- `utilities`: Utility functions and Python modules used in this pipeline.
+This project demonstrates a **production-style streaming data pipeline** built using:
 
-## Getting Started
+* **Python Producer** (Wikimedia live stream)
+* **File-based streaming ingestion**
+* **Delta Lake (Bronze → Silver → Gold)**
+* **Databricks Delta Live Tables (DLT)**
+* **SCD Type 2 implementation for dimensional modeling**
 
-To get started, go to the `transformations` folder -- most of the relevant source code lives there:
+The pipeline simulates a real-world **event-driven architecture** while remaining compatible with **Databricks free/serverless environments**.
 
-* By convention, every dataset under `transformations` is in a separate file.
-* Take a look at the sample under "sample_users_wikimedia_ingestion.py" to get familiar with the syntax.
-  Read more about the syntax at https://docs.databricks.com/ldp/developer/python-ref.
-* Use `Run file` to run and preview a single transformation.
-* Use `Run pipeline` to run _all_ transformations in the entire pipeline.
-* Use `+ Add` in the file browser to add a new data set definition.
-* Use `Schedule` to run the pipeline on a schedule!
+---
 
-For more tutorials and reference material, see https://docs.databricks.com/ldp.
-=======
-# wikimedia-eventhub-databricks-pipeline
->>>>>>> 9439e1c15cbda4ba0c67f7ced5948a141de24b1c
+## 🏗️ Architecture
+
+```
+Wikimedia Stream API
+        ↓
+Python Producer
+        ↓
+JSON Files (Streaming Simulation)
+        ↓
+Databricks (Auto Loader / Streaming Read)
+        ↓
+Bronze Layer (Raw Data)
+        ↓
+Silver Layer (Structured Data)
+        ↓
+Gold Layer (Aggregations + SCD Type 2)
+```
+
+---
+
+## 📁 Project Structure
+
+```
+wikimedia-eventhub-databricks-pipeline/
+│
+├── transformations/
+│   ├── wikimedia_bronze.py
+│   ├── wikimedia_silver.py
+│   ├── wikimedia_gold_scd2.py
+│
+├── producer/
+│   ├── wikimedia_producer.py
+│   ├── config.py
+│
+├── explorations/
+├── utilities/
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+---
+
+## 🔄 Data Flow
+
+### 🟤 Bronze Layer
+
+* Ingests raw JSON data from streaming files
+* Stores data without transformation
+* Schema:
+
+  * `body` (JSON string)
+  * `timestamp`
+  * `offset`
+  * `partition`
+  * `topic`
+
+---
+
+### ⚪ Silver Layer
+
+* Parses JSON into structured columns
+* Cleans and prepares data for analytics
+* Key fields:
+
+  * `user`
+  * `title`
+  * `timestamp`
+  * `bot`
+  * `namespace`
+
+---
+
+### 🟡 Gold Layer
+
+#### 1. Aggregations
+
+* Edits per user
+* Edits per minute
+* Top edited pages
+* Bot vs human activity
+
+#### 2. SCD Type 2 (Dimension Table)
+
+Tracks historical changes for users:
+
+| Column       | Description      |
+| ------------ | ---------------- |
+| user         | Business key     |
+| latest_title | Last edited page |
+| is_bot       | Bot flag         |
+| __START_AT   | Record start     |
+| __END_AT     | Record end       |
+| __IS_CURRENT | Active record    |
+
+---
+
+## 🧠 Key Concepts Demonstrated
+
+* Structured Streaming
+* Delta Lake architecture
+* Delta Live Tables (DLT)
+* Slowly Changing Dimensions (Type 2)
+* Event-driven ingestion
+* Schema evolution & parsing
+* Layered data modeling
+
