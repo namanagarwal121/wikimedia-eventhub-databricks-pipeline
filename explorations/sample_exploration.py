@@ -13,7 +13,6 @@ from pyspark.sql.functions import col
 EH_NAMESPACE = "wikimedia-producer"
 EH_NAME = "wikimedia-stream"
 
-EH_CONN_STR = "Endpoint=sb://wikimedia-producer.servicebus.windows.net/;SharedAccessKeyName=databricks;SharedAccessKey=6UEY80QSBCzxVqV8XE26QR4arXLKLD+Id+AEhBInWwY=;EntityPath=wikimedia-stream"
 
 KAFKA_OPTIONS = {
   "kafka.bootstrap.servers": f"{EH_NAMESPACE}.servicebus.windows.net:9093",
