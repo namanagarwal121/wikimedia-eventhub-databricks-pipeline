@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # wikimedia_ingestion
 
 This folder defines all source code for the 'wikimedia_ingestion' pipeline:
@@ -19,3 +20,6 @@ To get started, go to the `transformations` folder -- most of the relevant sourc
 * Use `Schedule` to run the pipeline on a schedule!
 
 For more tutorials and reference material, see https://docs.databricks.com/ldp.
+=======
+# wikimedia-eventhub-databricks-pipeline
+>>>>>>> 9439e1c15cbda4ba0c67f7ced5948a141de24b1c
